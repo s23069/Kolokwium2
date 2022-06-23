@@ -9,57 +9,82 @@ namespace APBD8_DK.Models
         public MainDbContext(DbContextOptions options) : base(options)
         {
         }
-        public DbSet<Patient> Patients { get; set; }
-        public DbSet<Doctor> Doctors { get; set; }
-        public DbSet<Prescription> Prescriptions { get; set; }
-        public DbSet<Medicament> Medicaments { get; set; }
-        public DbSet<Prescription_Medicament> Prescription_Medicaments { get; set; }
-        public IEnumerable<object> Doctor { get; internal set; }
+        public DbSet<Member> Members { get; set; }
+        public DbSet<File> Files { get; set; }
+        public DbSet<Organization> Organizations { get; set; }
+        public DbSet<Team> Teams { get; set; }
+        public DbSet<Membership> Memberships { get; set; }
+        //public IEnumerable<object> Doctor { get; internal set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Prescription_Medicament>(zwc =>
+            modelBuilder.Entity<Membership>(zwc =>
             {
-                zwc.HasKey(e => new { e.IdMedicament, e.IdPrescription });
+                zwc.HasKey(e => new { e.MemberId });//, e.TeamId
+            });
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<File>(zwc =>
+            {
+                zwc.HasKey(e => new { e.TeamId });
             });
 
-            SeedData(modelBuilder);
+            //SeedData(modelBuilder);
         }
 
         private void SeedData(ModelBuilder modelBuilder)
         {
 
-            modelBuilder.Entity<Patient>().
+            modelBuilder.Entity<Member>().
 
 
         HasData(
-                    new Patient { IdPatient = 1, FirstName = "Jan", LastName = "Kowalski", BirthDate = DateTime.Parse("2000-01-01") },
-                    new Patient { IdPatient = 2, FirstName = "Jan", LastName = "Kowalski", BirthDate = DateTime.Parse("2000-01-01") }
+                    new Member { MemberId = 1, OrganizationId = 1, MemberName = "jan", MemberSurname = "kow", MemberNickName = "12ss" },
+                    new Member { MemberId = 2, OrganizationId = 2, MemberName = "janek", MemberSurname = "kowalczyk", MemberNickName = "12ten" }
+
+
                 );
 
 
-            modelBuilder.Entity<Doctor>().HasData(
-                    new Doctor { IdDoctor = 1, FirstName = "Jan", LastName = "Kowalski", Email = "jankowalski@gmail.com" },
-                    new Doctor { IdDoctor = 2, FirstName = "Jan", LastName = "Kowalski", Email = "jankowalski@gmail.com" }
+            modelBuilder.Entity<File>().HasData(
+                    new File { FileId = 1, TeamId = 1, FileName = "tets", FileExtension = "var", FileSize = 12 },
+                    new File { FileId = 2, TeamId = 2, FileName = "testy", FileExtension = "doc", FileSize = 120 }
+
                 );
+            modelBuilder.Entity<Team>().HasData(
+                   new Team { TeamId = 1, OrganizationId = 1, TeamName = "testy", TeamDescription = "duzadruzyna" },
+                   new Team { TeamId = 2, OrganizationId = 2, TeamName = "testy2", TeamDescription = "duzadruzyna2" }
 
 
-            modelBuilder.Entity<Prescription>().HasData(
-                new Prescription { IdPrescription = 1, Date= DateTime.Parse("2000-01-01"), DueDate= DateTime.Parse("2001-01-01"),IdPatient=1,IdDoctor=1 },
-                new Prescription { IdPrescription = 2, Date= DateTime.Parse("2002-01-01"), DueDate= DateTime.Parse("2011-01-01"),IdPatient=2,IdDoctor=2 });
 
-            modelBuilder.Entity<Prescription_Medicament>().HasData(
-               new Prescription_Medicament { IdMedicament = 1, IdPrescription = 1, Dose = 23, Details = "lalalallala" },
-               new Prescription_Medicament { IdMedicament = 2, IdPrescription = 2, Dose = 10, Details = "lalalallalaterazspiewajznami" });
-            modelBuilder.Entity<Medicament>().HasData(
-                new Medicament { IdMedicament = 1, Name = "lek1", Description = "duzobierz", Type = "silne" },
-                new Medicament { IdMedicament = 2, Name = "lek22", Description = "maloobierz", Type = "slabe" });
+               );
+            modelBuilder.Entity<Organization>().HasData(
+                   new Organization { OrganizationId = 1, OrganizationName = "iaseste", organizationDomain = "www.223.pl" },
+                   new Organization { OrganizationId = 2, OrganizationName = "iaseste222", organizationDomain = "www.error3.pl" }
 
-        } 
+
+
+
+               );
+
+
+            modelBuilder.Entity<Membership>().HasData(
+                   new Membership { MemberId = 1, MembershipDate = DateTime.Parse("2000-01-01") },
+                   new Membership { MemberId = 2, MembershipDate = DateTime.Parse("2002-02-11") }
+
+
+               );
+
+
+
+
+
+        }
     }
 }
+
 
         //protected  override void OnConfiguring (DbContextOptionsBuilder optionsBuilder)
         //{
