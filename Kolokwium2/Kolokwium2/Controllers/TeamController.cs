@@ -20,11 +20,11 @@ namespace APBD8_V2_DK.Controllers
 
         [HttpGet("{TeamId}")]
 
-        public async Task<IActionResult> GetMusician(int TeamId)
+        public async Task<IActionResult> Getteam(int TeamId)
         {
             try
             {
-                return Ok(await _teamDbService.GetTeam(TeamId));
+                return Ok(await _teamDbService.Getteam());
             }
             catch (Exception e)
             {
